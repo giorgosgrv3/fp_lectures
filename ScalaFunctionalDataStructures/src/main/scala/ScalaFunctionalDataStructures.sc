@@ -17,13 +17,12 @@ val dropThree = aSequence.drop(2) // skip 2 from beginning
 val reversedSeq = aSequence.reverse
 val uniqueSeq = aSequence.distinct //remove duplicate elements
 
-val mixed = Set(1,2,3,4,5,6) ++ (1 to 3 by 2)
 ////////////    Scala List    ////////////////
 
 val aList = List(1,2,3,4,5)
 val firstElement = aList.head   // keep only first element
-val rest = aList.tail           // keep a+**ll but first element
-val aPrependedList = 0 +: aList :+ 6 // List(0,1,2,3,4,5)
+val rest = aList.tail           // keep all but first element
+val aPrependedList = 0 +: aList// List(0,1,2,3,4,5)
 val anExtendedList = 0 +: aList :+ 6 // List(0,1,2,3,4,5,6)
 /*
 :: can only be used to prepend ONLY in List
@@ -41,19 +40,22 @@ List(1,2) :: List(3,4) // List(List(1,2), 3, 4)
 :: Prepends List(1,2) to List(3,4), making List(List(1,2),3,4)
 */
 
-val lsize = aList.length
+val lsize = aList.length //LISTS have both .length and .size
 val lempty = aList.isEmpty
 val lasString = aList.mkString(", ")
 val lmodifiedSeq = aList.updated(2, 42) // updated(INDEX, element), so update index 2 with element 42
-val lnoNegatives: List[Int] = aList.filterNot(_ < 2)
-val lfirstThree = aList.take(3) //keep 3 first
-val ldropThree = aList.drop(3) //drop 3 first
 val reversedList = aList.reverse
 val uniqueList = aList.distinct
 
+val head = List(1,2,3,4,5).head
+val tail = List(1,2,3,4,5).tail //traditional way
+val head1 :: tail1 = (List(1, 2, 3, 4, 5): @unchecked) // alternative way
+val initList = List(1, 2, 3, 4, 5).init // Returns all elements except the last one: List(1, 2, 3)
 
-val head :: tail = (List(1, 2, 3): @unchecked) // Extracts head and tail
-val initList = List(1, 2, 3, 4).init // Returns all elements except the last one: List(1, 2, 3)
+val lnoNegatives: List[Int] = aList.filterNot(_ < 2)
+val lnoNegatives2: List[Int] = aList.filter(_<2)
+val lfirstThree = aList.take(3) //keep 3 first
+val ldropThree = aList.drop(3) //drop 3 first
 val takeWhileList = List(1, 2, 3, 4, 5).takeWhile(_ < 3) // Returns List(1, 2)
 val takeDropList = List(1, 2, 3, 4, 5).dropWhile(_ < 3) // Returns List(3, 4, 5)
 val (prefix, suffix) = List(1, 2, 3, 4, 5).span(_ < 3) // Splits list into two, according to a condition
@@ -70,11 +72,14 @@ val emptyR = aRange.isEmpty // Check if the range is empty (always false for a n
 val asStringR = aRange.mkString(", ") // Convert the range into a string with a specified separator
 val modifiedRangeR = aRange.updated(1,42)
 
-// Filtering negative elements (Note: Ranges don't support filterNot directly)
-val noNegativesR = aRange.filter(_ >= 2)
+val noNegativesR = aRange.filter(_ >= 2) //filter elements >=2
 // Appending and prepending elements (Note: Ranges don't support :+ or +: directly)
 val appendedRange = aRange ++ Seq(4, 5, 6) //this is a Vector
-val appendedRange2 = Seq(4, 5, 6) ++ aRange // order matters, this is now a List2
+val appendedRange2 = Seq(4, 5, 6) ++ aRange // order matters, this is now a List
+val appendedRange3 = Set(4, 5, 6) ++ aRange // order matters, this is now a HashSet
+val appendedRange4 = aRange ++ Set(4,5,6) // order matters, this is now a Vector
+val appendedRange5 = aRange ++ Map(1 -> "one") //also a vector
+
 
 val prependedRange = Seq(0) ++ aRange
 val mixedRange = Seq(0) ++ aRange ++ Seq(5,6,7)
@@ -88,9 +93,8 @@ val distinctRangeR = aRange.distinct // Distinct elements (Note: Ranges don't su
 //Scala Set
 val aSet: Set[Int] = Set(1, 2, 3)
 val containsTwo = aSet.contains(2) // true
-val newSet = aSet + 4 // Set(1, 2, 3, 4)
-val removedTwo = aSet - 2 // Set(1, 3)
-val setSize = aSet.size
+
+val setSize = aSet.size //set only supports .size, not .length
 val isSetEmpty = aSet.isEmpty
 val setString = aSet.mkString(", ")
 val unionSet = aSet ++ Set(3, 4, 5) // HashSet(1, 2, 3, 4, 5)
@@ -101,8 +105,11 @@ Because for small number of elements (<=4), sets become Set1, Set2, Set3, Set4 (
 For larger number (>4), it defaults to hashSet.
 */
 
-val commonElements = aSet & Set(2, 3, 4) // Set(2, 3)
+val newSet = aSet + 4 // Set(1, 2, 3, 4)
+val newSet2 = aSet ++ Set(4,5,6)
+val removedTwo = aSet - 2 // Set(1, 3)
 val diffSet = aSet -- Set(2, 3) // Set(1)
+val commonElements = aSet & Set(2, 3, 4) // Set(2, 3)
 val isSubset = Set(1, 2) subsetOf aSet // true
 
 val mySet: Set[Int] = Set(1, 2, 3)
@@ -114,7 +121,7 @@ mySet match {
 
 //Scala Map
 val myMap: Map[String, Int] = Map("one" -> 1, "two" -> 2, "three" -> 3)
-val mapSize = myMap.size
+val mapSize = myMap.size //map only supports .size, not .length
 val isMapEmpty = myMap.isEmpty
 val mapKeys = myMap.keys.toList
 
@@ -131,9 +138,12 @@ val mapValues2 = myMap.values.toList
 val stringValues = myMap.values.mkString(";")
 val stringKeys = myMap.keys.mkString(";")
 val valueOfTwo = myMap("two") // 2
-val newMap = myMap + ("four" -> 4)
+
+val newMap = myMap + ("four" -> 4) //Map4
+val newMap2 = myMap ++ Map ("four" -> 4, "five" -> 5) // >4 elements, HashMap
+val newMap3 = myMap ++ Map ("four" -> 4, 5 -> "five" ) // 5 -> "five" INCOMPATIBLE FORMAT, becomes a List of tuples
 val removedTwoM = myMap - "two"
-val mergedMap = myMap ++ Map("three" -> 33, "four" -> 4)
+
 val filteredMap = myMap.view.filterKeys(key => key.startsWith("t")).toMap
 val aMap: Map[String, Int] = Map("one" -> 1, "two" -> 2, "three" -> 3)
 aMap match {
